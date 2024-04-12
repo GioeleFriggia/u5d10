@@ -1,59 +1,60 @@
 package gioelefriggia.u5d10.controllers;
 
+import gioelefriggia.u5d10.services.EmployeeService;
+import gioelefriggia.u5d10.services.DeviceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import gioelefriggia.u5d10.entities.Dispositivo;
-import gioelefriggia.u5d10.services.DispositivoService;
+import gioelefriggia.u5d10.entities.Dipendente;
 
 import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/dispositivi")
-public class DispositivoController {
+@RequestMapping("/api/dipendenti")
+public class DipendenteController {
 
-    private final DispositivoService dispositivoService;
+    private final EmployeeService deviceService;
 
     @Autowired
-    public DispositivoController(DispositivoService dispositivoService) {
-        this.dispositivoService = dispositivoService;
+    public DipendenteController(EmployeeService  deviceService) { // Corretto il nome del servizio
+        this.deviceService = deviceService;
     }
 
     @GetMapping
-    public ResponseEntity<List<Dispositivo>> getAllDevices() {
-        List<Dispositivo> dispositivi = dispositivoService.getAllDevices();
-        return ResponseEntity.ok(dispositivi);
+    public ResponseEntity<List<Dipendente>> getAllEmployees() {
+        List<Dipendente> dipendenti = deviceService.findAllEmployees(); // Corretto il nome del metodo
+        return ResponseEntity.ok(dipendenti);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Dispositivo> getDeviceById(@PathVariable UUID id) {
-        return dispositivoService.findDeviceById(id)
-                .map(dispositivo -> ResponseEntity.ok(dispositivo))
-                .orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<Dipendente> getEmployeeById(@PathVariable UUID id) {
+        return deviceService.findEmployeeById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ResponseEntity<Dispositivo> createDevice(@RequestBody Dispositivo dispositivo) {
-        Dispositivo savedDispositivo = dispositivoService.save(dispositivo);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedDispositivo);
+    public ResponseEntity<Dipendente> createEmployee(@RequestBody Dipendente dipendente) {
+        Dipendente savedDipendente = deviceService.saveEmployee(dipendente);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedDipendente);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Dispositivo> updateDevice(@PathVariable UUID id, @RequestBody Dispositivo updatedDispositivo) {
-        return dispositivoService.findDeviceById(id)
-                .map(existingDispositivo -> {
-                    updatedDispositivo.setId(existingDispositivo.getId());
-                    Dispositivo modifiedDispositivo = dispositivoService.save(updatedDispositivo);
-                    return ResponseEntity.ok(modifiedDispositivo);
+    public ResponseEntity<Dipendente> updateEmployee(@PathVariable UUID id, @RequestBody Dipendente dipendente) {
+        return deviceService.findEmployeeById(id)
+                .map(existingDipendente -> {
+                    dipendente.setId(existingDipendente.getId());
+                    Dipendente updatedDipendente = deviceService.saveEmployee(dipendente);
+                    return ResponseEntity.ok(updatedDipendente);
                 })
-                .orElseGet(() -> ResponseEntity.notFound().build());
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteDevice(@PathVariable UUID id) {
-        dispositivoService.deleteDevice(id);
+    public ResponseEntity<Void> deleteEmployee(@PathVariable UUID id) {
+        deviceService.deleteEmployee(id);
         return ResponseEntity.noContent().build();
     }
 }
