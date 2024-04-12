@@ -5,5 +5,5 @@ import gioelefriggia.u5d10.entities.Dipendente;
 import java.util.UUID;
 
 public interface DipendenteRepository extends JpaRepository<Dipendente, UUID> {
-   
+
 }
