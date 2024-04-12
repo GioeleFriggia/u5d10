@@ -1,4 +1,5 @@
 package gioelefriggia.u5d10.entities;
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,10 +29,14 @@ public class Dipendente {
     @Column(nullable = false, unique = true)
     private String email;
 
+    // NUOVO CAMPO per l'URL dell'immagine del profilo
+    @Column(name = "immagine_url")
+    private String immagineUrl;
+
     @OneToMany(mappedBy = "dipendente", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Dispositivo> dispositivi;
 
-        public Dipendente(String username, String nome, String cognome, String email) {
+    public Dipendente(String username, String nome, String cognome, String email) {
         this.username = username;
         this.nome = nome;
         this.cognome = cognome;

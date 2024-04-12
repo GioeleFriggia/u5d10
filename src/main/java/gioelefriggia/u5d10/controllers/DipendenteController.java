@@ -63,8 +63,7 @@ public class DipendenteController {
 
     @PostMapping("/{id}/upload-immagine")
     public ResponseEntity<String> uploadImmagineProfilo(@PathVariable UUID id, @RequestParam("file") MultipartFile file) {
-
-        String urlImmagazzinato;
+        String urlImmagazzinato = ""; // = Logica per ottenere l'URL dell'immagine caricata
 
         Dipendente dipendente = employeeService.findEmployeeById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Dipendente non trovato"));
@@ -81,7 +80,6 @@ public class DipendenteController {
         dipendente.setNome(dto.nome());
         dipendente.setCognome(dto.cognome());
         dipendente.setEmail(dto.email());
-
         return dipendente;
     }
 }
